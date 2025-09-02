@@ -1,37 +1,46 @@
 from typing import Callable
-from operations import operations
+from operations import op_credit, op_debit, op_total, InvalidAmountError
+from data import DataProgram
+from IOHandler import ConsoleIOHandler, BaseIOHandler
 
-def handle_user_choice(operations: Callable[[str], None], user_choice: str) -> bool:
-    if user_choice == '4':
-        return False
-    if user_choice == '1':
-        operations('TOTAL')
-    elif user_choice == '2':
-        operations('CREDIT')
-    elif user_choice == '3':
-        operations('DEBIT')
-    else:
-        print("Invalid choice, please select 1-4.")
+def handle_user_choice(user_choice: str, data: DataProgram, io_handler: BaseIOHandler) -> bool:
+
+    try:
+        match user_choice.strip().upper():
+            case '1':
+                op_total(data)
+            case '2':
+                final_balance = op_credit(data, io_handler.get_user_input())
+                data.write(final_balance)
+            case '3':
+                final_balance = op_debit(data, io_handler.get_user_input())
+                data.write(final_balance)
+            case '4':
+                # Exit the program
+                return False
+            case _:
+                # Ignore unknown operation types
+                io_handler.display_message("Invalid choice, please select 1-4.")
+    except InvalidAmountError:
+        # Just continue the program on invalid amount error
+        return True
+    except EOFError:
+        # New line to have a good display even on input closing
+        io_handler.display_message("")
     return True
 
-def run(get_user_choice: Callable[[], str]) -> bool:
-    """"""
-    print("--------------------------------")
-    print("Account Management System")
-    print("1. View Balance")
-    print("2. Credit Account")
-    print("3. Debit Account")
-    print("4. Exit")
-    print("--------------------------------")
-    user_choice = get_user_choice()
-
-    return handle_user_choice(operations, user_choice)
 
 def main():
-    
+    io_handler = ConsoleIOHandler()
     try:
-        while run(lambda: input("Enter your choice (1-4): ")):
-            pass
+        running = True
+        while running:
+            
+            data = DataProgram()
+            io_handler.display_menu()
+            user_choice = io_handler.get_user_input()
+
+            running = handle_user_choice(user_choice, data, io_handler)
     except EOFError:
         # Gracefully exit on closing input
         pass
