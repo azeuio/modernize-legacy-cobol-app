@@ -1,8 +1,5 @@
 from typing import Callable
-
-def operations(mode):
-    # Fonction factice pour simuler l'appel à 'Operations'
-    print(f"Appel de la fonction Operations avec le mode : {mode}")
+from operations import operations
 
 def handle_user_choice(operations: Callable[[str], None], user_choice: str) -> bool:
     if user_choice == '4':
