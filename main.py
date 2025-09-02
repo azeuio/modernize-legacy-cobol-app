@@ -8,19 +8,19 @@ def handle_user_choice(user_choice: str, data: DataProgram, io_handler: BaseIOHa
     try:
         match user_choice.strip().upper():
             case '1':
-                op_total(data)
+                op_total(data, io_handler)
             case '2':
-                final_balance = op_credit(data, io_handler.get_user_input())
+                final_balance = op_credit(data, io_handler)
                 data.write(final_balance)
             case '3':
-                final_balance = op_debit(data, io_handler.get_user_input())
+                final_balance = op_debit(data, io_handler)
                 data.write(final_balance)
             case '4':
                 # Exit the program
                 return False
             case _:
                 # Ignore unknown operation types
-                io_handler.display_message("Invalid choice, please select 1-4.")
+                io_handler.display_message(f"Invalid choice ({user_choice}), please select 1-4.")
     except InvalidAmountError:
         # Just continue the program on invalid amount error
         return True
@@ -30,15 +30,13 @@ def handle_user_choice(user_choice: str, data: DataProgram, io_handler: BaseIOHa
     return True
 
 
-def main():
-    io_handler = ConsoleIOHandler()
+def main(io_handler: BaseIOHandler):
     try:
         running = True
+        data = DataProgram()
         while running:
-            
-            data = DataProgram()
             io_handler.display_menu()
-            user_choice = io_handler.get_user_input()
+            user_choice = io_handler.get_user_input("Enter your choice (1-4): ")
 
             running = handle_user_choice(user_choice, data, io_handler)
     except EOFError:
@@ -48,4 +46,4 @@ def main():
     print("Exiting the program. Goodbye!")
 
 if __name__ == "__main__":
-    main()
+    main(ConsoleIOHandler())

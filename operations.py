@@ -1,34 +1,37 @@
+from IOHandler import BaseIOHandler
 from data import DataProgram
 from exceptions import InvalidAmountError
 
-def op_total(data: DataProgram) -> float:
+def op_total(data: DataProgram, io_handler: BaseIOHandler) -> float:
     final_balance = data.read()
-    print(f"Current balance: {final_balance:.2f}")
+    io_handler.display_message(f"Current balance: {final_balance:.2f}")
     return final_balance
 
-def op_credit(data: DataProgram, amount_str: str) -> float:
+def op_credit(data: DataProgram, io_handler: BaseIOHandler) -> float:
+    amount_str = io_handler.get_user_input("Enter amount to credit: ")
     final_balance = data.read()
     try:
         amount = abs(float(amount_str))
     except ValueError:
-        print(f"Invalid amount. Balance: {final_balance: .2f}")
+        io_handler.display_message(f"Invalid amount. Balance: {final_balance: .2f}")
         raise InvalidAmountError
     final_balance += amount
     data.write(final_balance)
-    print(f"Amount credited. New balance: {final_balance:.2f}")
+    io_handler.display_message(f"Amount credited. New balance: {final_balance:.2f}")
     return final_balance
 
-def op_debit(data: DataProgram, amount_str: str) -> float:
+def op_debit(data: DataProgram, io_handler: BaseIOHandler) -> float:
+    amount_str = io_handler.get_user_input("Enter amount to debit: ")
     final_balance = data.read()
     try:
         amount = abs(float(amount_str))
     except ValueError:
-        print(f"Invalid amount. Balance: {final_balance: .2f}")
+        io_handler.display_message(f"Invalid amount. Balance: {final_balance: .2f}")
         raise InvalidAmountError
     if final_balance >= amount:
         final_balance -= amount
         data.write(final_balance)
-        print(f"Amount debited. New balance: {final_balance:.2f}")
+        io_handler.display_message(f"Amount debited. New balance: {final_balance:.2f}")
     else:
-        print(f"Insufficient funds. Balance: {final_balance: .2f}")
+        io_handler.display_message(f"Insufficient funds. Balance: {final_balance: .2f}")
     return final_balance

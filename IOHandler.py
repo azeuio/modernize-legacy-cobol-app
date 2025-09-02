@@ -18,8 +18,8 @@ class ConsoleIOHandler(BaseIOHandler):
         print("4. Exit")
         print("--------------------------------")
 
-    def get_user_input(self):
-        return input("Enter your choice (1-4): ")
+    def get_user_input(self, prompt: str):
+        return input(prompt)
 
     def display_message(self, message: str):
         print(message)
