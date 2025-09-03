@@ -1,5 +1,4 @@
-# Not included in coverage because it is an interface
-class BaseIOHandler: # pragma: no cover
+class BaseIOHandler:
     def display_menu(self):
         raise NotImplementedError
 

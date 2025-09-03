@@ -1,4 +1,3 @@
-# Not included in coverage because it is an interface
 class BaseDataProgram: # pragma: no cover
     def read(self):
         raise NotImplementedError

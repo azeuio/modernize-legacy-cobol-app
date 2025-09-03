@@ -1,0 +1,15 @@
+[run]
+branch = True
+source = src
+
+[report]
+omit =
+    */tests/*
+    */test_*.py
+    */__init__.py
+show_missing = True
+skip_covered = True
+exclude_lines =
+    if __name__\s*==\s*['"]__main__['"]\s*:
+    raise NotImplementedError
+    pragma: no cover

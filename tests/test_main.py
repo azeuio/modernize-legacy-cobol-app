@@ -1,3 +1,4 @@
+import pytest
 from src.main import handle_user_choice, main
 from src.data import BaseDataProgram
 from src.IOHandler import BaseIOHandler
@@ -46,6 +47,8 @@ def test_continue():
     assert handle_user_choice('Inf', MockDataProgram(), MockIOHandler()) == True, "Inf is not the exit option and thus should return True"
     assert handle_user_choice('-Inf', MockDataProgram(), MockIOHandler()) == True, "-Inf is not the exit option and thus should return True"
     assert handle_user_choice('Nan', MockDataProgram(), MockIOHandler()) == True, "Nan is not the exit option and thus should return True"
+
+    assert handle_user_choice('2', MockDataProgram(), MockIOHandler("abc")) == True, "Invalid input should not exit the program"
 
 class MockIntegrationIOHandler(BaseIOHandler):
     def __init__(self, user_inputs=""):
@@ -121,3 +124,4 @@ def test_integration_eof_back_to_menu(capsys):
     assert got[4] == "menu"
     assert got[5] == "prompt"
     assert "exiting" in got[6].lower()
+    
