@@ -1,6 +1,6 @@
-from main import handle_user_choice, main
-from data import BaseDataProgram
-from IOHandler import BaseIOHandler
+from src.main import handle_user_choice, main
+from src.data import BaseDataProgram
+from src.IOHandler import BaseIOHandler
 
 # Mocking DataProgram so in the future, if an external DB is used, tests won't be affected
 class MockDataProgram(BaseDataProgram):

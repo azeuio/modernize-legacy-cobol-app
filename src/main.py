@@ -1,5 +1,4 @@
-from typing import Callable
-from operations import op_credit, op_debit, op_total, InvalidAmountError
+from operations import op_credit, op_debit, op_total
 from data import DataProgram
 from IOHandler import ConsoleIOHandler, BaseIOHandler
 
@@ -21,7 +20,7 @@ def handle_user_choice(user_choice: str, data: DataProgram, io_handler: BaseIOHa
             case _:
                 # Ignore unknown operation types
                 io_handler.display_message(f"Invalid choice ({user_choice}), please select 1-4.")
-    except InvalidAmountError:
+    except ValueError:
         # Just continue the program on invalid amount error
         return True
     except EOFError:

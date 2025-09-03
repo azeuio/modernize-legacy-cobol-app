@@ -1,6 +1,5 @@
 from IOHandler import BaseIOHandler
 from data import DataProgram
-from exceptions import InvalidAmountError
 
 def op_total(data: DataProgram, io_handler: BaseIOHandler) -> float:
     final_balance = data.read()
@@ -14,7 +13,7 @@ def op_credit(data: DataProgram, io_handler: BaseIOHandler) -> float:
         amount = abs(float(amount_str))
     except ValueError:
         io_handler.display_message(f"Invalid amount. Balance: {final_balance: .2f}")
-        raise InvalidAmountError
+        raise ValueError
     final_balance += amount
     data.write(final_balance)
     io_handler.display_message(f"Amount credited. New balance: {final_balance:.2f}")
@@ -27,7 +26,7 @@ def op_debit(data: DataProgram, io_handler: BaseIOHandler) -> float:
         amount = abs(float(amount_str))
     except ValueError:
         io_handler.display_message(f"Invalid amount. Balance: {final_balance: .2f}")
-        raise InvalidAmountError
+        raise ValueError
     if final_balance >= amount:
         final_balance -= amount
         data.write(final_balance)

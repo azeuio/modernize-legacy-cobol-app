@@ -1,4 +1,4 @@
-from data import DataProgram
+from src.data import DataProgram
 
 def test_starting_money():
     data = DataProgram()

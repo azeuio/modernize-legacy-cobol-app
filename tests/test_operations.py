@@ -1,9 +1,8 @@
 import pytest
-from operations import op_total, op_credit, op_debit
-from exceptions import InvalidAmountError
 from math import isnan
-from data import BaseDataProgram
-from IOHandler import BaseIOHandler
+from src.operations import op_total, op_credit, op_debit
+from src.data import BaseDataProgram
+from src.IOHandler import BaseIOHandler
 
 class MockDataProgram(BaseDataProgram):
     def __init__(self, initial_balance=0.0):
@@ -50,9 +49,9 @@ def test_op_credit_adds_amount():
     assert op_credit(MockDataProgram(1.5), MockIOHandler("2.5")) == 4.0
 
 def test_op_credit_invalid_amount():
-    with pytest.raises(InvalidAmountError):
+    with pytest.raises(ValueError):
         op_credit(MockDataProgram(100), MockIOHandler("abc"))
-        assert False, "Should raise InvalidAmountError"
+        assert False, "Should raise ValueError"
 
 def test_op_credit_large_numbers():
     assert op_credit(MockDataProgram(0), MockIOHandler(str(5_000_000_000_000_000))) == 5_000_000_000_000_000, (
@@ -72,9 +71,9 @@ def test_op_debit_insufficient_funds():
     assert op_debit(MockDataProgram(0), MockIOHandler("1")) == 0
 
 def test_op_debit_invalid_amount():
-    with pytest.raises(InvalidAmountError):
+    with pytest.raises(ValueError):
         op_debit(MockDataProgram(100), MockIOHandler("xyz"))
-        assert False, "Should raise InvalidAmountError"
+        assert False, "Should raise ValueError"
 
 def test_intentional_bug_op_credit_negative_treated_as_positive():
     assert op_credit(MockDataProgram(100), MockIOHandler("-12")) == 112, (
