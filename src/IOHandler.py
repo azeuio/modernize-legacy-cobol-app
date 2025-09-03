@@ -1,4 +1,5 @@
-class BaseIOHandler:
+# Not included in coverage because it is an interface
+class BaseIOHandler: # pragma: no cover
     def display_menu(self):
         raise NotImplementedError
 
@@ -8,7 +9,8 @@ class BaseIOHandler:
     def display_message(self, _message: str):
         raise NotImplementedError
 
-class ConsoleIOHandler(BaseIOHandler):
+# Not included in coverage because it is not part of the core logic
+class ConsoleIOHandler(BaseIOHandler): # pragma: no cover
     def display_menu(self):
         print("--------------------------------")
         print("Account Management System")
