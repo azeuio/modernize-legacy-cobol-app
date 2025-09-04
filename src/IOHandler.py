@@ -1,15 +1,20 @@
 class BaseIOHandler:
+    """Abstract base class for IO Handlers."""
     def display_menu(self):
+        """Displays the menu to the user."""
         raise NotImplementedError
 
     def get_user_input(self):
+        """Gets input from the user."""
         raise NotImplementedError
 
     def display_message(self, _message: str):
+        """Displays a message to the user."""
         raise NotImplementedError
 
 # Not included in coverage because it is not part of the core logic
 class ConsoleIOHandler(BaseIOHandler): # pragma: no cover
+    """Concrete IO Handler that interacts via the console."""
     def display_menu(self):
         print("--------------------------------")
         print("Account Management System")

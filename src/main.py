@@ -3,7 +3,28 @@ from data import DataProgram
 from IOHandler import ConsoleIOHandler, BaseIOHandler
 
 def handle_user_choice(user_choice: str, data: DataProgram, io_handler: BaseIOHandler) -> bool:
+    """
+    Handles the user's menu choice and performs the corresponding operation.
 
+    Parameters:
+        user_choice (str): The user's selected menu option.
+        data (DataProgram): The data handler for reading and writing balance information.
+        io_handler (BaseIOHandler): The input/output handler for user interaction.
+
+    Returns:
+        bool: True to continue the program loop, False to exit.
+
+    Operations:
+        '1' - Display total balance.
+        '2' - Perform a credit operation and update balance.
+        '3' - Perform a debit operation and update balance.
+        '4' - Exit the program.
+        Any other input - Display an invalid choice message.
+
+    Exceptions:
+        ValueError - Continues the program if an invalid amount is entered.
+        EOFError - Handles input closure gracefully.
+    """
     try:
         match user_choice.strip().upper():
             case '1':
@@ -30,6 +51,7 @@ def handle_user_choice(user_choice: str, data: DataProgram, io_handler: BaseIOHa
 
 
 def main(io_handler: BaseIOHandler):
+    """Main function to run the balance management program."""
     try:
         running = True
         data = DataProgram()

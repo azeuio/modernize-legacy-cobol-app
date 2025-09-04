@@ -2,11 +2,18 @@ from IOHandler import BaseIOHandler
 from data import DataProgram
 
 def op_total(data: DataProgram, io_handler: BaseIOHandler) -> float:
+    """Displays the total balance."""
     final_balance = data.read()
     io_handler.display_message(f"Current balance: {final_balance:.2f}")
     return final_balance
 
 def op_credit(data: DataProgram, io_handler: BaseIOHandler) -> float:
+    """
+    Performs a credit operation (adds funds).
+    
+    Exceptions:
+        ValueError - Raised if the input amount is invalid.
+    """
     amount_str = io_handler.get_user_input("Enter amount to credit: ")
     final_balance = data.read()
     try:
@@ -20,6 +27,11 @@ def op_credit(data: DataProgram, io_handler: BaseIOHandler) -> float:
     return final_balance
 
 def op_debit(data: DataProgram, io_handler: BaseIOHandler) -> float:
+    """
+    Performs a debit operation (subtracts funds).
+    Exceptions:
+        ValueError - Raised if the input amount is invalid.
+    """
     amount_str = io_handler.get_user_input("Enter amount to debit: ")
     final_balance = data.read()
     try:
