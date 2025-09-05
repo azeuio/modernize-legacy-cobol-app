@@ -35,6 +35,7 @@ class MockIOHandler(BaseIOHandler):
         print(message)
 
 def test_op_total_no_changes():
+    """Test that viewing total does not change the balance"""
     assert op_total(MockDataProgram(100), MockIOHandler()) == 100, "Total should not change upon viewing it"
     assert op_total(MockDataProgram(1.2), MockIOHandler()) == 1.2, "Total should not change upon viewing it"
     assert op_total(MockDataProgram(-1.2), MockIOHandler()) == -1.2, "Total should not change upon viewing it"
@@ -43,17 +44,25 @@ def test_op_total_no_changes():
     assert isnan(op_total(MockDataProgram(float('Nan')), MockIOHandler())), "Total should not change upon viewing it"
 
 def test_op_credit_adds_amount():
+    """Test that crediting adds the amount to the balance"""
     assert op_credit(MockDataProgram(100), MockIOHandler("50")) == 150
     assert op_credit(MockDataProgram(0), MockIOHandler("0")) == 0
     assert op_credit(MockDataProgram(-10), MockIOHandler("10")) == 0
     assert op_credit(MockDataProgram(1.5), MockIOHandler("2.5")) == 4.0
 
 def test_op_credit_invalid_amount():
+    """Test that crediting with invalid input raises ValueError"""
     with pytest.raises(ValueError):
         op_credit(MockDataProgram(100), MockIOHandler("abc"))
-        assert False, "Should raise ValueError"
+    with pytest.raises(ValueError):
+        op_credit(MockDataProgram(100), MockIOHandler("Nan"))
+    with pytest.raises(ValueError):
+        op_credit(MockDataProgram(100), MockIOHandler("Inf"))
+    with pytest.raises(ValueError):
+        op_credit(MockDataProgram(100), MockIOHandler("-Inf"))
 
 def test_op_credit_large_numbers():
+    """Test crediting with very large numbers"""
     assert op_credit(MockDataProgram(0), MockIOHandler(str(5_000_000_000_000_000))) == 5_000_000_000_000_000, (
         "python handles infinitly large numbers. As such, there is no reason to limit number size. "
         "The test value is quadrillion, the value of earth according to Gregory Laughlin(2020). "
@@ -61,27 +70,40 @@ def test_op_credit_large_numbers():
     )
 
 def test_op_debit_subtracts_amount():
+    """Test that debiting subtracts the amount from the balance"""
     assert op_debit(MockDataProgram(100), MockIOHandler("50")) == 50
     assert op_debit(MockDataProgram(10), MockIOHandler("10")) == 0
     assert op_debit(MockDataProgram(5.5), MockIOHandler("2.5")) == 3.0
 
 def test_op_debit_insufficient_funds():
-    # Balance should not change with insufficient funds
-    assert op_debit(MockDataProgram(10), MockIOHandler("20")) == 10
-    assert op_debit(MockDataProgram(0), MockIOHandler("1")) == 0
+    """Test that debiting with insufficient funds does not change the balance"""
+    assert op_debit(MockDataProgram(10), MockIOHandler("20")) == 10, "Balance should not change with insufficient funds"
+    assert op_debit(MockDataProgram(0), MockIOHandler("1")) == 0, "Balance should not change with insufficient funds"
 
 def test_op_debit_invalid_amount():
+    """Test that debiting with invalid input raises ValueError"""
     with pytest.raises(ValueError):
         op_debit(MockDataProgram(100), MockIOHandler("xyz"))
         assert False, "Should raise ValueError"
+    with pytest.raises(ValueError):
+        op_debit(MockDataProgram(10), MockIOHandler("Nan"))
+        assert False, "Should raise ValueError"
+    with pytest.raises(ValueError):
+        op_debit(MockDataProgram(10), MockIOHandler("Inf"))
+        assert False, "Should raise ValueError"
+    with pytest.raises(ValueError):
+        op_debit(MockDataProgram(10), MockIOHandler("-Inf"))
+        assert False, "Should raise ValueError"
 
 def test_intentional_bug_op_credit_negative_treated_as_positive():
+    """Test that crediting negative amount treats it as positive"""
     assert op_credit(MockDataProgram(100), MockIOHandler("-12")) == 112, (
     "This bug (negative number treated as positive) "
     "has been here long enough that people might depend on it."
     )
 
 def test_intentional_bug_op_debit_negative_treated_as_positive():
+    """Test that debiting negative amount treats it as positive"""
     assert op_debit(MockDataProgram(100), MockIOHandler("-12")) == 88, (
     "This bug (negative number treated as positive) "
     "has been here long enough that people might depend on it."

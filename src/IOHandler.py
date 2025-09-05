@@ -11,6 +11,10 @@ class BaseIOHandler:
     def display_message(self, _message: str):
         """Displays a message to the user."""
         raise NotImplementedError
+    
+    def amount_repr(self, amount: float):
+        """Displays an amount to the user."""
+        return f"{amount:09.2f}"
 
 # Not included in coverage because it is not part of the core logic
 class ConsoleIOHandler(BaseIOHandler): # pragma: no cover
@@ -25,7 +29,7 @@ class ConsoleIOHandler(BaseIOHandler): # pragma: no cover
         print("--------------------------------")
 
     def get_user_input(self, prompt: str):
-        return input(prompt)
+        return input(prompt + "\n")
 
     def display_message(self, message: str):
         print(message)

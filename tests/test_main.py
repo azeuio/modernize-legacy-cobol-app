@@ -35,9 +35,11 @@ class MockIOHandler(BaseIOHandler):
         pass
 
 def test_exit():
+    """Test whether user can exit or not"""
     assert handle_user_choice('4', MockDataProgram(), MockIOHandler()) == False, "4 is the exit option and thus should return False to quit"
 
 def test_continue():
+    """Test whether user can cause unexpected behavior leading to exit"""
     assert handle_user_choice('1', MockDataProgram(), MockIOHandler()) == True, "1 is not the exit option and thus should return True"
     assert handle_user_choice('2', MockDataProgram(), MockIOHandler()) == True, "2 is not the exit option and thus should return True"
     assert handle_user_choice('3', MockDataProgram(), MockIOHandler()) == True, "3 is not the exit option and thus should return True"
@@ -71,6 +73,7 @@ class MockIntegrationIOHandler(BaseIOHandler):
         print(message)
 
 def test_integration(capsys):
+    """Integration test simulating a user session"""
     assert main(MockIntegrationIOHandler(
         "1\n" # View balance, should be 1000
         "500\n" # Invalid choice
@@ -93,8 +96,8 @@ def test_integration(capsys):
     assert got[6] == "menu" # automaticly back to menu
     assert got[7] == "prompt"
 
-
 def test_integration_eof_quitting(capsys):
+    """Integration test simulating a user session ending with EOF"""
     assert main(MockIntegrationIOHandler(
         "1" # View balance, should be 1000
         "" # EOF (should quit)
@@ -110,6 +113,7 @@ def test_integration_eof_quitting(capsys):
     assert "exiting" in got[5].lower()
 
 def test_integration_eof_back_to_menu(capsys):
+    """Integration test simulating a user session ending with EOF. It should go back to menu and then quit"""
     assert main(MockIntegrationIOHandler(
         "2" # Credit an amount
         "" # EOF (should go back to menu, then quit)
