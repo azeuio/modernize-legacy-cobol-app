@@ -129,3 +129,57 @@ def test_integration_eof_back_to_menu(capsys):
     assert got[5] == "prompt"
     assert "exiting" in got[6].lower()
     
+def test_integration_invalid_credit_input(capsys):
+    """Integration test simulating a user session with invalid credit input"""
+    assert main(MockIntegrationIOHandler(
+        "2\n" # Credit an amount
+        "abc\n" # Invalid input
+        "4\n" # Exit
+        ""
+    )) == None, "Integration test failed"
+    captured = capsys.readouterr()
+    print(captured.out)
+    got = captured.out.splitlines()
+    assert got[0] == "menu"
+    assert got[1] == "prompt"
+    assert got[2] == "prompt"
+    assert "invalid" in got[3].lower() # invalid input
+    assert got[4] == "menu"
+    assert got[5] == "prompt"
+    assert "exiting" in got[6].lower()
+    
+def test_integration_invalid_debit_input(capsys):
+    """Integration test simulating a user session with invalid debit input"""
+    assert main(MockIntegrationIOHandler(
+        "3\n" # Debit an amount
+        "abc\n" # Invalid input
+        "4\n" # Exit
+        ""
+    )) == None, "Integration test failed"
+    captured = capsys.readouterr()
+    print(captured.out)
+    got = captured.out.splitlines()
+    assert got[0] == "menu"
+    assert got[1] == "prompt"
+    assert got[2] == "prompt"
+    assert "invalid" in got[3].lower() # invalid input
+    assert got[4] == "menu"
+    assert got[5] == "prompt"
+    assert "exiting" in got[6].lower()
+
+def test_integration_invalid_menu_input(capsys):
+    """Integration test simulating a user session with invalid menu input"""
+    assert main(MockIntegrationIOHandler(
+        "abc\n" # Invalid menu input
+        "4\n" # Exit
+        ""
+    )) == None, "Integration test failed"
+    captured = capsys.readouterr()
+    print(captured.out)
+    got = captured.out.splitlines()
+    assert got[0] == "menu"
+    assert got[1] == "prompt"
+    assert "invalid" in got[2].lower() # invalid input
+    assert got[3] == "menu"
+    assert got[4] == "prompt"
+    assert "exiting" in got[5].lower()
